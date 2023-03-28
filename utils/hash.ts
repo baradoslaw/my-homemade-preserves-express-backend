@@ -1,5 +1,9 @@
-const {hash} = require('bcrypt');
+import {compare, hash} from "bcrypt";
 
 export const makeHash = async (plainText: string): Promise<string> => {
-  return hash(plainText, 10);
+  return await hash(plainText, 10);
+};
+
+export const checkHash = async (text: string, givenHash: string): Promise<boolean> => {
+  return await compare(text, givenHash);
 };
