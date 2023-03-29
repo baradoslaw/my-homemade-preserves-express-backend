@@ -6,3 +6,7 @@ export interface UserEntity {
   name: string;
   surname: string;
 }
+
+export interface NewUserEntity extends Omit<UserEntity, 'id'> {
+  id?: string;
+}
