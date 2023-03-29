@@ -1,4 +1,4 @@
-import {checkHash, makeHash} from "../utils/hash";
+import {checkHash, makeHash} from "../../utils/hash";
 
 test('makeHash creates valid bcrypt hash (60 characters).', async () => {
   const text = 'Example password';
