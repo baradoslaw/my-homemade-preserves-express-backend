@@ -2,6 +2,8 @@ import {NewUserEntity, UserEntity} from "../types";
 import {ValidationError} from "../utils/errors";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
+import {v4 as uuid} from 'uuid';
+import {makeHash} from "../utils/hash";
 
 type UserRecordResults = [UserEntity[], FieldPacket[]];
 
@@ -44,5 +46,27 @@ export class UserRecord implements UserEntity {
     }) as UserRecordResults;
 
     return results.length === 0 ? null : new UserRecord(results[0]);
+  }
+
+  async initPwd(): Promise<void> {
+    if (this.pwd.length === 60) {
+      throw new Error('Hasło już zostało zhashowane.');
+    } else {
+      this.pwd = await makeHash(this.pwd);
+    }
+  }
+
+  async insert(): Promise<void> {
+    if (await UserRecord.getOneByLogin(this.login) !== null) {
+      throw new ValidationError('Nie można dodać już istniejącego użytkownika.');
+    }
+
+    if (!this.id) {
+      this.id = uuid();
+    } else {
+      throw new ValidationError('Nie można dodać już istniejącego użytkownika.')
+    }
+
+    await pool.execute("INSERT INTO `user`(`id`, `login`, `pwd`, `email`, `name`, `surname`) VALUES(:id, :login, :pwd, :email, :name, :surname)", this);
   }
 }
