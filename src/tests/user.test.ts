@@ -151,3 +151,16 @@ test('UserRecord validates email correctly.', () => {
     email: '',
   })).toThrow(message);
 });
+
+test('UserRecord.initPwd() properly creates hash of a password.', async () => {
+  const user = new UserRecord({
+    ...defaultUser,
+    pwd: 'pwd',
+  });
+  await user.initPwd();
+
+  expect(user.pwd.length).toBe(60);
+  await expect(async () => {
+    await user.initPwd();
+  }).rejects.toThrowError('Hasło już zostało zhashowane.');
+});
