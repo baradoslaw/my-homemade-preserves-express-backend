@@ -10,6 +10,7 @@ const defaultUser = {
 };
 
 afterAll(async () => {
+  await pool.execute("DELETE FROM `user` WHERE `login` = 'Test login'");
   await pool.end();
 });
 
@@ -31,7 +32,7 @@ test('UserRecord.getOneById returns null from database for unexisting entry.', a
 });
 
 test('UserRecord.getOneByLogin downloads data from database for one entry.', async () => {
-  const user = await UserRecord.getOneByLogin('dec63404-66ad-43c1-b483-47701306ee91');
+  const user = await UserRecord.getOneByLogin('Test1');
 
   expect(user.id).toBe('dec63404-66ad-43c1-b483-47701306ee91');
   expect(user.login).toBe('Test1');
@@ -47,14 +48,6 @@ test('UserRecord.getOneById returns null from database for unexisting entry.', a
   expect(user).toBeNull();
 });
 
-test('UserRecord.insert returns new UUID.', async () => {
-  const user = new UserRecord(defaultUser);
-  await user.insert();
-
-  expect(user.id).toBeDefined();
-  expect(typeof user.id).toBe('string');
-})
-
 test('UserRecord.insert inserts data to database.', async () => {
   const user = new UserRecord(defaultUser);
   await user.insert();
@@ -64,4 +57,21 @@ test('UserRecord.insert inserts data to database.', async () => {
   expect(foundUser).toBeDefined();
   expect(foundUser).not.toBeNull();
   expect(foundUser.id).toBe(user.id);
+});
+
+
+test('UserRecord.insert does not allow to save UserRecord with login that is already occupied or user that is already saved.', async () => {
+  const user = new UserRecord({
+    ...defaultUser,
+    login: 'Test1',
+  });
+
+  await expect(async () => {
+    await user.insert();
+  }).rejects.toThrowError('Nie można dodać już istniejącego użytkownika.');
+
+  const user1 = await UserRecord.getOneByLogin('Test1');
+  await expect(async () => {
+    await user1.insert();
+  }).rejects.toThrowError('Nie można dodać już istniejącego użytkownika.');
 });
