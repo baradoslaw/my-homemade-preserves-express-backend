@@ -1,5 +1,9 @@
 import {NewUserEntity, UserEntity} from "../types";
 import {ValidationError} from "../utils/errors";
+import {pool} from "../utils/db";
+import {FieldPacket} from "mysql2";
+
+type UserRecordResults = [UserEntity[], FieldPacket[]];
 
 export class UserRecord implements UserEntity {
   public id: string;
@@ -24,5 +28,21 @@ export class UserRecord implements UserEntity {
     this.email = obj.email;
     this.name = obj.name;
     this.surname = obj.surname;
+  }
+
+  static async getOneById(id: string): Promise<UserRecord | null> {
+    const [results] = await pool.execute("SELECT * FROM `user` WHERE id = :id", {
+      id,
+    }) as UserRecordResults;
+
+    return results.length === 0 ? null : new UserRecord(results[0]);
+  }
+
+  static async getOneByLogin(login: string): Promise<UserRecord | null> {
+    const [results] = await pool.execute("SELECT * FROM `user` WHERE login = :login", {
+      login,
+    }) as UserRecordResults;
+
+    return results.length === 0 ? null : new UserRecord(results[0]);
   }
 }

@@ -1,4 +1,5 @@
 import {UserRecord} from "../../records/user.record";
+import {pool} from "../../utils/db";
 
 const defaultUser = {
   login: 'Test login',
@@ -7,6 +8,10 @@ const defaultUser = {
   name: 'Test',
   surname: 'Person',
 };
+
+afterAll(async () => {
+  await pool.end();
+});
 
 test('UserRecord.getOneById downloads data from database for one entry.', async () => {
   const user = await UserRecord.getOneById('dec63404-66ad-43c1-b483-47701306ee91');
