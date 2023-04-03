@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'express-async-errors';
 import {handleError} from "./utils/errors";
 import './utils/db';
+import {userRouter} from "./routers/user.router";
 
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+app.use('/user', userRouter);
 
 app.use(handleError);
 
