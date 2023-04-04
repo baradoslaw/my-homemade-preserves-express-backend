@@ -16,12 +16,20 @@ export class UserRecord implements UserEntity {
   public surname: string;
 
   constructor(obj: NewUserEntity) {
+    const strongRegex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/);
+
     if (obj.login.length < 5 || obj.login.length > 20) {
       throw new ValidationError('Login powinien zawierać od 5 do 20 znaków.');
     }
 
-    if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(obj.email)) {
+    if (obj.email.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/) === null) {
       throw new ValidationError('Podano niepoprawny adres email.');
+    }
+
+    if (obj.pwd.length !== 60) {
+      if(obj.pwd.length < 8 || obj.pwd.length > 20 || obj.pwd.match(strongRegex) === null) {
+        throw new ValidationError('Niepoprawne hasło. Hasło powinno składać się przynajmniej z ośmiu znaków (maksymalnie 20 znaków), w tym małych i dużych liter oraz cyfr.');
+      }
     }
 
     this.id = obj.id;
