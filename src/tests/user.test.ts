@@ -152,10 +152,64 @@ test('UserRecord validates email correctly.', () => {
   })).toThrow(message);
 });
 
+test('UserRecord validates password correctly.', () => {
+  const message = 'Niepoprawne hasło. Hasło powinno składać się przynajmniej z ośmiu znaków (maksymalnie 20 znaków), w tym małych i dużych liter oraz cyfr.';
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'aq1QAzq',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'Q1azwsxcde34rfvbgt56y',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'ASD567SZX',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'sdj7856shs',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'asdsdhJSB',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'sdsdfds',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'HDSJASDFH',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: '673482347',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'aq1QAzq',
+  })).toThrow(message);
+
+  expect(() => new UserRecord({
+    ...defaultUser,
+    pwd: 'a!q1QAz@q',
+  })).not.toThrow(message);
+});
+
 test('UserRecord.initPwd() properly creates hash of a password.', async () => {
   const user = new UserRecord({
     ...defaultUser,
-    pwd: 'pwd',
+    pwd: 'pwd1ASZXc',
   });
   await user.initPwd();
 
