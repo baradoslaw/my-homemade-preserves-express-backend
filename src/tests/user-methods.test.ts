@@ -42,8 +42,25 @@ test('UserRecord.getOneByLogin downloads data from database for one entry.', asy
   expect(user.surname).toBe('Unit');
 });
 
-test('UserRecord.getOneById returns null from database for unexisting entry.', async () => {
+test('UserRecord.getOneByLogin returns null from database for unexisting entry.', async () => {
   const user = await UserRecord.getOneByLogin('asdzx');
+
+  expect(user).toBeNull();
+});
+
+test('UserRecord.getOneByEmail downloads data from database for one entry.', async () => {
+  const user = await UserRecord.getOneByEmail('testEmail@mail.to');
+
+  expect(user.id).toBe('dec63404-66ad-43c1-b483-47701306ee91');
+  expect(user.login).toBe('Test1');
+  expect(user.pwd).toBe('$2a$12$1Pbh5rfnPxiK5tVwOAxhhOe9CNICnekP0LCYrt2pW20NsVbEPJaXe');
+  expect(user.email).toBe('testEmail@mail.to');
+  expect(user.name).toBe('Testing');
+  expect(user.surname).toBe('Unit');
+});
+
+test('UserRecord.getOneByEmail returns null from database for unexisting entry.', async () => {
+  const user = await UserRecord.getOneByEmail('asdzx');
 
   expect(user).toBeNull();
 });
