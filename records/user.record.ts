@@ -74,7 +74,7 @@ export class UserRecord implements UserEntity {
 
   async insert(): Promise<void> {
     if (await UserRecord.getOneByLogin(this.login) !== null) {
-      throw new ValidationError('Nie można dodać już istniejącego użytkownika.');
+      throw new ValidationError('Podany login jest już zajęty.');
     }
 
     if (await UserRecord.getOneByEmail(this.email) !== null) {

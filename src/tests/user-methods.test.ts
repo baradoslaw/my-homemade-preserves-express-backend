@@ -85,7 +85,7 @@ test('UserRecord.insert does not allow to save UserRecord with login that is alr
 
   await expect(async () => {
     await user.insert();
-  }).rejects.toThrowError('Nie można dodać już istniejącego użytkownika.');
+  }).rejects.toThrowError('Podany login jest już zajęty.');
 
   const user1 = await UserRecord.getOneByLogin('Test1');
   user1.login = 'No login';
