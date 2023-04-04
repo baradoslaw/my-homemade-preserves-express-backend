@@ -48,6 +48,14 @@ export class UserRecord implements UserEntity {
     return results.length === 0 ? null : new UserRecord(results[0]);
   }
 
+  static async getOneByEmail(email: string): Promise<UserRecord | null> {
+    const [results] = await pool.execute("SELECT * FROM `user` WHERE email = :email", {
+      email,
+    }) as UserRecordResults;
+
+    return results.length === 0 ? null : new UserRecord(results[0]);
+  }
+
   async initPwd(): Promise<void> {
     if (this.pwd.length === 60) {
       throw new Error('Hasło już zostało zhashowane.');
@@ -59,6 +67,10 @@ export class UserRecord implements UserEntity {
   async insert(): Promise<void> {
     if (await UserRecord.getOneByLogin(this.login) !== null) {
       throw new ValidationError('Nie można dodać już istniejącego użytkownika.');
+    }
+
+    if (await UserRecord.getOneByEmail(this.email) !== null) {
+      throw new ValidationError('Podany email jest już zajęty.');
     }
 
     if (!this.id) {
