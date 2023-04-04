@@ -88,6 +88,8 @@ test('UserRecord.insert does not allow to save UserRecord with login that is alr
   }).rejects.toThrowError('Nie można dodać już istniejącego użytkownika.');
 
   const user1 = await UserRecord.getOneByLogin('Test1');
+  user1.login = 'No login';
+  user1.email = 'NoEmail@mail.to';
   await expect(async () => {
     await user1.insert();
   }).rejects.toThrowError('Nie można dodać już istniejącego użytkownika.');
@@ -96,7 +98,8 @@ test('UserRecord.insert does not allow to save UserRecord with login that is alr
 test('UserRecord.insert does not allow to save UserRecord with email that is already used and saved in database.', async () => {
   const user = new UserRecord({
     ...defaultUser,
-    email: 'testEmail@mail.to',
+    login: 'No login',
+    email: 'test2@mail.to',
   });
 
   await expect(async () => {
