@@ -5,6 +5,7 @@ import {handleError} from "./utils/errors";
 import './utils/db';
 import {userRouter} from "./routers/user.router";
 import rateLimit from "express-rate-limit";
+import {preserveRouter} from "./routers/preserve.router";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(rateLimit({
 }));
 
 app.use('/user', userRouter);
+app.use('/preserve', preserveRouter);
 
 app.use(handleError);
 
