@@ -2,6 +2,7 @@ import {NewPreserveEntity, PreserveEntity} from "../types/preserves/preserve-ent
 import {FieldPacket} from "mysql2";
 import {TypeOfPreserve} from "../types";
 import {ValidationError} from "../utils/errors";
+import {pool} from "../utils/db";
 
 type PreserveRecordResults = [PreserveEntity[], FieldPacket[]];
 
@@ -29,5 +30,21 @@ export class PreserveRecord implements PreserveEntity {
     this.description = obj.description;
     this.typeName = obj.typeName;
     this.userId = obj.userId;
+  }
+
+  static async getOne(id: string): Promise<PreserveRecord | null> {
+    const [results] = await pool.execute("SELECT * FROM `preserve` WHERE id = :id", {
+      id,
+    }) as PreserveRecordResults;
+
+    return results.length === 0 ? null : new PreserveRecord(results[0]);
+  }
+
+  static async getAllPreservesForUser(id: string): Promise<PreserveEntity[]> {
+    const [results] = await pool.execute("SELECT * FROM `preserve` WHERE `userId` = :id", {
+      id,
+    }) as PreserveRecordResults;
+
+    return results;
   }
 }
