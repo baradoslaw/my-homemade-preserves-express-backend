@@ -1,10 +1,8 @@
-import {TypeOfPreserve} from "./type-of-preserve";
-
 export interface PreserveEntity {
   id: string;
   name: string;
   description: string;
-  typeName: TypeOfPreserve;
+  typeName: string;
   userId: string;
 }
 
