@@ -1,8 +1,10 @@
 import {NewPreserveEntity, PreserveEntity} from "../types/preserves/preserve-entity";
 import {FieldPacket} from "mysql2";
+import {v4 as uuid} from 'uuid';
 import {TypeOfPreserve} from "../types";
 import {ValidationError} from "../utils/errors";
 import {pool} from "../utils/db";
+import {UserRecord} from "./user.record";
 
 type PreserveRecordResults = [PreserveEntity[], FieldPacket[]];
 
@@ -46,5 +48,19 @@ export class PreserveRecord implements PreserveEntity {
     }) as PreserveRecordResults;
 
     return results;
+  }
+
+  async insert(): Promise<void> {
+    if (await UserRecord.getOneById(this.userId) === null) {
+      throw new ValidationError('Dany użytkownik nie istnieje.');
+    }
+
+    if (!this.id) {
+      this.id = uuid();
+    } else {
+      throw new ValidationError('Przetwór o podanym id już istnieje.');
+    }
+
+    await pool.execute("INSERT INTO `preserve`(`id`, `name`, `description`, `typeName`, `userId`) VALUES(:id, :name, :description, :typeName, :userId)", this);
   }
 }
