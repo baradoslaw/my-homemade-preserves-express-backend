@@ -23,7 +23,7 @@ test('PreserveRecord.getOne downloads data from database for one entry.', async 
 });
 
 test('PreserveRecord.getOne returns null from database for unexisting entry.', async () => {
-  const preserve = await PreserveRecord.getOneById('wrong ID');
+  const preserve = await PreserveRecord.getOne('wrong ID');
 
   expect(preserve).toBeNull();
 });
@@ -33,12 +33,13 @@ test('PreserveRecord.getAllPreservesForUser downloads all entries for provided u
 
   expect(preserves.length).not.toBe(0);
   expect(preserves[0].name).toBe('Ogórki kiszone');
+  expect(preserves[1].name).toBe('Suszone borowiki');
 });
 
 test('PreserveRecord.getAllPreservesForUser returns empty array, when there is no preserves for given user id.', async () => {
   const preserves = await PreserveRecord.getAllPreservesForUser('This user does not have preserves.');
 
-  expect(preserves.length).toBeLessThan(0);
+  expect(preserves.length).toBe(0);
 });
 
 // test('PreserveRecord.insert inserts data to database.', async () => {
