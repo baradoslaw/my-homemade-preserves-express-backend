@@ -12,4 +12,10 @@ export const preserveRouter = Router()
     const preserves = await PreserveRecord.getAllPreservesForUser(req.params.id);
 
     res.json(preserves);
+  })
+
+  .post('/add', async (req, res) => {
+    const preserve = new PreserveRecord(req.body);
+    await preserve.insert();
+    res.json(preserve);
   });
