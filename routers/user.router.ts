@@ -13,7 +13,7 @@ export const userRouter = Router()
     res.json(user.id);
   })
 
-  .get('/log-in', async (req, res) => {
+  .post('/log-in', async (req, res) => {
       const user = await UserRecord.getOneByLogin(req.body.login);
       if (await checkHash(req.body.pwd, user.pwd)) {
           res.json(user);
