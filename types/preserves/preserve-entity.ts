@@ -9,3 +9,5 @@ export interface PreserveEntity {
 export interface NewPreserveEntity extends Omit<PreserveEntity, 'id'> {
   id?: string;
 }
+
+export type PreserveEntityReadyToSend = Omit<PreserveEntity, 'userId'>;

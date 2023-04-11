@@ -11,7 +11,17 @@ export const preserveRouter = Router()
   .get('/for-user/:id', async (req, res) => {
     const preserves = await PreserveRecord.getAllPreservesForUser(req.params.id);
 
-    res.json(preserves);
+    const preservesToSend = preserves.map(item => {
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        typeName: item.typeName,
+      };
+    });
+    console.log(preservesToSend);
+
+    res.json(preservesToSend);
   })
 
   .post('/add', async (req, res) => {
