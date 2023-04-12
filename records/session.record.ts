@@ -23,6 +23,19 @@ export class SessionRecord implements SessionEntity {
       this.createdAt = new Date;
     }
 
-    await pool.execute("INSERT INTO `session`(`session_id`, `user_id`, `created_at`) VALUES (:sessionId, :userId, :createdAt)", this);
+    await pool.execute("INSERT INTO `session`(`sessionId`, `userId`, `createdAt`) VALUES (:sessionId, :userId, :createdAt)", this);
+  }
+
+  static async checkSession(id: string, userId: string): Promise<boolean> {
+    const [results] = await pool.execute("SELECT * FROM `session` WHERE sessionId = :id", {
+      id,
+    }) as SessionRecordResults;
+    const session = results[0];
+
+    if (results.length === 0) {
+      return false;
+    }
+
+    return session.userId === userId;
   }
 }
