@@ -30,7 +30,7 @@ export const preserveRouter = Router()
     res.json(preserve);
   })
 
-  .delete('/delete-preserve/:id', async (req, res) => {
+  .delete('/delete/:id', async (req, res) => {
     const preserve = await PreserveRecord.getOne(req.params.id);
 
     if (!preserve) {
