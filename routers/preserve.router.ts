@@ -1,5 +1,6 @@
 import {Router} from "express";
 import {PreserveRecord} from "../records/preserve.record";
+import {ValidationError} from "../utils/errors";
 
 export const preserveRouter = Router()
   .get('/:id', async (req, res) => {
@@ -19,7 +20,6 @@ export const preserveRouter = Router()
         typeName: item.typeName,
       };
     });
-    console.log(preservesToSend);
 
     res.json(preservesToSend);
   })
@@ -28,4 +28,15 @@ export const preserveRouter = Router()
     const preserve = new PreserveRecord(req.body);
     await preserve.insert();
     res.json(preserve);
+  })
+
+  .delete('/delete-preserve/:id', async (req, res) => {
+    const preserve = await PreserveRecord.getOne(req.params.id);
+
+    if (!preserve) {
+      throw new ValidationError('Nie ma takiego wyrobu.');
+    }
+
+    await preserve.delete();
+    res.end();
   });

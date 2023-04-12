@@ -1,4 +1,4 @@
-import {NewPreserveEntity, PreserveEntity} from "../types/preserves/preserve-entity";
+import {NewPreserveEntity, PreserveEntity} from "../types";
 import {FieldPacket} from "mysql2";
 import {v4 as uuid} from 'uuid';
 import {TypeOfPreserve} from "../types";
@@ -62,5 +62,11 @@ export class PreserveRecord implements PreserveEntity {
     }
 
     await pool.execute("INSERT INTO `preserve`(`id`, `name`, `description`, `typeName`, `userId`) VALUES(:id, :name, :description, :typeName, :userId)", this);
+  }
+
+  async delete(): Promise<void> {
+    await pool.execute("DELETE FROM `preserve` WHERE `id` = :id", {
+      id: this.id,
+    });
   }
 }
