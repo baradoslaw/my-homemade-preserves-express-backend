@@ -3,6 +3,7 @@ import {UserRecord} from "../records/user.record";
 import {checkHash} from "../utils/hash";
 import {ValidationError} from "../utils/errors";
 import {SessionRecord} from "../records/session.record";
+import {getSessionIdFromCookie} from "../utils/getDataFromCookies";
 
 export const userRouter = Router()
   .post('/new-user', async (req, res) => {
@@ -31,4 +32,12 @@ export const userRouter = Router()
       } else {
           throw new ValidationError('Niepoprawny login lub hasło.');
       }
+  })
+
+  .delete('/log-out', async (req, res) => {
+      const sessionId = getSessionIdFromCookie(req);
+      const session = await SessionRecord.getOne(sessionId);
+      await session.delete();
+
+      res.end();
   });

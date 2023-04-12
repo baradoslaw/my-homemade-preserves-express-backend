@@ -26,6 +26,20 @@ export class SessionRecord implements SessionEntity {
     await pool.execute("INSERT INTO `session`(`sessionId`, `userId`, `createdAt`) VALUES (:sessionId, :userId, :createdAt)", this);
   }
 
+  async delete(): Promise<void> {
+    await pool.execute("DELETE FROM `session` WHERE `sessionId` = :id", {
+      id: this.sessionId,
+    });
+  }
+
+  static async getOne(id: string): Promise<SessionRecord> {
+    const [results] = await pool.execute("SELECT * FROM `session` WHERE sessionId = :id", {
+      id,
+    }) as SessionRecordResults;
+
+    return results.length === 0 ? null : new SessionRecord(results[0]);
+  }
+
   static async checkSession(id: string, userId: string): Promise<boolean> {
     const [results] = await pool.execute("SELECT * FROM `session` WHERE sessionId = :id", {
       id,
