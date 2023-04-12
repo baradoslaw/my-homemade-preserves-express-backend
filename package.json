@@ -1,6 +1,6 @@
 {
   "name": "my-homemade-preserves-express-backend",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Backend for My Homemade Preserves app",
   "main": "index.js",
   "scripts": {
