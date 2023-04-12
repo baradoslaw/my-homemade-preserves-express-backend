@@ -23,6 +23,6 @@ export class SessionRecord implements SessionEntity {
       this.createdAt = new Date;
     }
 
-    await pool.execute("INSERT INTO `session`(`session_id`, `user_id`, `createdAt`) VALUES (:sessionId, :userId, :createdAt)", this);
+    await pool.execute("INSERT INTO `session`(`session_id`, `user_id`, `created_at`) VALUES (:sessionId, :userId, :createdAt)", this);
   }
 }

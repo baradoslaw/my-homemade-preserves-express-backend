@@ -17,11 +17,13 @@ export const userRouter = Router()
   .post('/log-in', async (req, res) => {
       const user = await UserRecord.getOneByLogin(req.body.login);
 
-      const session = new SessionRecord({
-          userId: user.id,
-      });
-
       if (await checkHash(req.body.pwd, user.pwd)) {
+          const session = new SessionRecord({
+              userId: user.id,
+          });
+          await session.insert();
+
+          // res.cookie('sessionId', session.sessionId);  Doesn't work with fetch, for now I save cookie manually on FE
           res.json({
               user,
               sessionId: session.sessionId,
