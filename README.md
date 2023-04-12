@@ -1,15 +1,11 @@
 # my-homemade-preserves-express-backend
 Backend for My Homemade Preserves app.
-<a name="readme-top"></a>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 My Homemade Preserves is an app that allows to track your preserves. I made it at the end of course to check my skills. You can find frontend for the app <a href="https://github.com/baradoslaw/my-homemade-preserves-frontend">here</a>.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -18,8 +14,6 @@ My Homemade Preserves is an app that allows to track your preserves. I made it a
 * React
 * Express.js
 * TypeScript
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -41,7 +35,6 @@ My Homemade Preserves is an app that allows to track your preserves. I made it a
    npm start
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -55,5 +48,3 @@ Planned features:
 - Current state of preserve
 - Changing name or description of preserve
 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
